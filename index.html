@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Features Lab - Interactive Tutorial</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Machine Learning Features Lab</h1>
+            <nav class="nav">
+                <button class="nav-btn" data-section="introduction">Introduction</button>
+                <button class="nav-btn" data-section="selection">Feature Selection</button>
+                <button class="nav-btn" data-section="extraction">Feature Extraction</button>
+                <button class="nav-btn" data-section="practice">Practice</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main container">
+        <!-- Introduction Section -->
+        <section id="introduction" class="section active">
+            <div class="section-header">
+                <h2>What are Features in Machine Learning?</h2>
+                <p>Features are individual measurable properties of observed phenomena. They're the input variables that help our models make predictions.</p>
+            </div>
+
+            <div class="demo-container">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Housing Price Prediction Example</h3>
+                    </div>
+                    <div class="card__body">
+                        <p>Let's look at a simple housing dataset where we predict house prices based on various features:</p>
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <strong>Bedrooms</strong>
+                                <span class="feature-type">Numerical</span>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Bathrooms</strong>
+                                <span class="feature-type">Numerical</span>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Area (sqft)</strong>
+                                <span class="feature-type">Numerical</span>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Age (years)</strong>
+                                <span class="feature-type">Numerical</span>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Location Score</strong>
+                                <span class="feature-type">Numerical</span>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Garage</strong>
+                                <span class="feature-type">Binary</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="introChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-concepts">
+                <h3>Key Concepts:</h3>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <h4>Feature Types</h4>
+                        <ul>
+                            <li><strong>Numerical:</strong> Continuous values (price, area)</li>
+                            <li><strong>Categorical:</strong> Discrete categories (color, type)</li>
+                            <li><strong>Binary:</strong> Yes/No values (has garage)</li>
+                        </ul>
+                    </div>
+                    <div class="concept-card">
+                        <h4>Feature Quality</h4>
+                        <ul>
+                            <li><strong>Relevant:</strong> Correlates with target</li>
+                            <li><strong>Informative:</strong> Provides unique information</li>
+                            <li><strong>Non-redundant:</strong> Not duplicated by others</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Selection Section -->
+        <section id="selection" class="section">
+            <div class="section-header">
+                <h2>Feature Selection</h2>
+                <p>Feature selection is the process of selecting a subset of relevant features for model construction.</p>
+            </div>
+
+            <div class="method-tabs">
+                <button class="tab-btn active" data-tab="filter">Filter Methods</button>
+                <button class="tab-btn" data-tab="wrapper">Wrapper Methods</button>
+                <button class="tab-btn" data-tab="embedded">Embedded Methods</button>
+            </div>
+
+            <!-- Filter Methods Tab -->
+            <div id="filter" class="tab-content active">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Filter Methods</h3>
+                        <p>Select features based on statistical measures, independent of the model</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="interactive-demo">
+                            <div class="demo-controls">
+                                <label class="form-label">Correlation Threshold:</label>
+                                <input type="range" id="correlationThreshold" min="0" max="1" step="0.1" value="0.3" class="form-control">
+                                <span id="correlationValue">0.3</span>
+                            </div>
+                            <div class="feature-selection-demo">
+                                <div class="feature-list">
+                                    <h4>Available Features:</h4>
+                                    <div id="filterFeatures"></div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="correlationChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wrapper Methods Tab -->
+            <div id="wrapper" class="tab-content">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Wrapper Methods</h3>
+                        <p>Select features based on model performance using cross-validation</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="interactive-demo">
+                            <div class="demo-controls">
+                                <label class="form-label">Number of Features to Select:</label>
+                                <input type="range" id="numFeatures" min="1" max="8" step="1" value="5" class="form-control">
+                                <span id="numFeaturesValue">5</span>
+                            </div>
+                            <div class="feature-selection-demo">
+                                <div class="feature-list">
+                                    <h4>Selected Features (RFE):</h4>
+                                    <div id="rfeFeatures"></div>
+                                </div>
+                                <div class="performance-metrics">
+                                    <h4>Model Performance:</h4>
+                                    <div class="metric">
+                                        <span>Accuracy:</span>
+                                        <span id="modelAccuracy">85%</span>
+                                    </div>
+                                    <div class="metric">
+                                        <span>Training Time:</span>
+                                        <span id="trainingTime">0.5s</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Embedded Methods Tab -->
+            <div id="embedded" class="tab-content">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Embedded Methods</h3>
+                        <p>Feature selection is built into the model training process</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="interactive-demo">
+                            <div class="demo-controls">
+                                <label class="form-label">Lasso Alpha (Regularization):</label>
+                                <input type="range" id="lassoAlpha" min="0.001" max="0.1" step="0.001" value="0.01" class="form-control">
+                                <span id="lassoAlphaValue">0.01</span>
+                            </div>
+                            <div class="feature-selection-demo">
+                                <div class="feature-list">
+                                    <h4>Feature Coefficients:</h4>
+                                    <div id="lassoFeatures"></div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="lassoChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Extraction Section -->
+        <section id="extraction" class="section">
+            <div class="section-header">
+                <h2>Feature Extraction</h2>
+                <p>Feature extraction transforms existing features into a new set of features that better represents the data.</p>
+            </div>
+
+            <div class="method-tabs">
+                <button class="tab-btn active" data-tab="pca">PCA</button>
+                <button class="tab-btn" data-tab="lda">LDA</button>
+            </div>
+
+            <!-- PCA Tab -->
+            <div id="pca" class="tab-content active">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Principal Component Analysis (PCA)</h3>
+                        <p>Reduces dimensionality while preserving maximum variance</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="interactive-demo">
+                            <div class="demo-controls">
+                                <label class="form-label">Number of Components:</label>
+                                <input type="range" id="pcaComponents" min="1" max="4" step="1" value="2" class="form-control">
+                                <span id="pcaComponentsValue">2</span>
+                            </div>
+                            <div class="pca-demo">
+                                <div class="pca-info">
+                                    <h4>Explained Variance:</h4>
+                                    <div id="pcaVariance"></div>
+                                    <h4>Original Features → Components:</h4>
+                                    <div id="pcaMapping"></div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="pcaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LDA Tab -->
+            <div id="lda" class="tab-content">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Linear Discriminant Analysis (LDA)</h3>
+                        <p>Supervised dimensionality reduction that maximizes class separability</p>
+                    </div>
+                    <div class="card__body">
+                        <div class="interactive-demo">
+                            <div class="lda-demo">
+                                <div class="lda-info">
+                                    <h4>Class Separation:</h4>
+                                    <div id="ldaInfo"></div>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="ldaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Section -->
+        <section id="practice" class="section">
+            <div class="section-header">
+                <h2>Hands-on Practice</h2>
+                <p>Apply what you've learned with interactive exercises.</p>
+            </div>
+
+            <div class="practice-exercises">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Exercise 1: Feature Selection Challenge</h3>
+                    </div>
+                    <div class="card__body">
+                        <p>Try to achieve the highest model accuracy by selecting the best features:</p>
+                        <div class="exercise-controls">
+                            <div class="feature-checkboxes">
+                                <h4>Select Features:</h4>
+                                <div id="practiceFeatures"></div>
+                            </div>
+                            <div class="results">
+                                <h4>Results:</h4>
+                                <div class="metric">
+                                    <span>Model Accuracy:</span>
+                                    <span id="practiceAccuracy">--</span>
+                                </div>
+                                <div class="metric">
+                                    <span>Features Used:</span>
+                                    <span id="practiceFeatureCount">0</span>
+                                </div>
+                                <button class="btn btn--primary" id="runPrediction">Run Prediction</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Code Examples</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="code-examples">
+                            <h4>Python Implementation:</h4>
+                            <pre><code># Feature Selection with Lasso
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import Lasso
+
+# Create Lasso model
+lasso = Lasso(alpha=0.01)
+selector = SelectFromModel(lasso)
+
+# Fit and transform
+X_selected = selector.fit_transform(X, y)
+
+# PCA for Feature Extraction
+from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
